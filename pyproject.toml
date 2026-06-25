@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "llm-finetuning"
+version = "0.1.0"
+description = "End-to-end LLM fine-tuning pipeline with LoRA/QLoRA support"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "torch>=2.3.0",
+    "transformers>=4.45.0",
+    "peft>=0.13.0",
+    "trl>=0.11.0",
+    "bitsandbytes>=0.44.0",
+    "accelerate>=0.34.0",
+    "datasets>=3.0.0",
+    "evaluate>=0.4.0",
+    "sacrebleu>=2.4.0",
+    "rouge-score>=0.1.2",
+    "loguru>=0.7.0",
+    "pyyaml>=6.0",
+    "numpy>=1.26.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-cov>=5.0.0",
+    "black>=24.0.0",
+    "flake8>=7.0.0",
+    "isort>=5.13.0",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.black]
+line-length = 120
+target-version = ["py310", "py311"]
+
+[tool.isort]
+profile = "black"
+line_length = 120
+
+[tool.flake8]
+max-line-length = 120
+extend-ignore = ["E203", "W503"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v"
