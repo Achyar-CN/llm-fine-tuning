@@ -1,0 +1,17 @@
+num_samples: 10000
+seed: 42
+output_path: data/raw/train.jsonl
+
+# Domain distribution (must sum to 1.0)
+domain_weights:
+  general_qa: 0.25
+  summarization: 0.20
+  classification: 0.20
+  translation: 0.20
+  code_explanation: 0.15
+
+# Train / validation / test split ratios (must sum to 1.0)
+split:
+  train: 0.80
+  validation: 0.10
+  test: 0.10
