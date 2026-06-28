@@ -1,0 +1,21 @@
+# TinyLlama-1.1B-Chat — smallest model, runs on CPU or any GPU
+# Good for: quick iteration, local development, proof-of-concept
+model_name_or_path: TinyLlama/TinyLlama-1.1B-Chat-v1.0
+model_family: llama
+load_in_4bit: false
+load_in_8bit: false
+torch_dtype: float16
+device_map: auto
+
+# LoRA hyperparameters (small model → smaller rank sufficient)
+lora_r: 16
+lora_alpha: 32
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj

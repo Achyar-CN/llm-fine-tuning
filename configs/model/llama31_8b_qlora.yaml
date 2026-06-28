@@ -1,0 +1,22 @@
+# Meta-Llama-3.1-8B-Instruct + QLoRA 4-bit
+# Good for: production-scale fine-tuning, requires ~16GB VRAM
+# QLoRA reduces VRAM from ~16GB (full) to ~6-8GB
+model_name_or_path: meta-llama/Meta-Llama-3.1-8B-Instruct
+model_family: llama
+load_in_4bit: true   # QLoRA: 4-bit base model weights
+load_in_8bit: false
+torch_dtype: bfloat16
+device_map: auto
+
+# LoRA hyperparameters — higher rank for larger model
+lora_r: 64
+lora_alpha: 128
+lora_dropout: 0.05
+lora_target_modules:
+  - q_proj
+  - k_proj
+  - v_proj
+  - o_proj
+  - gate_proj
+  - up_proj
+  - down_proj
