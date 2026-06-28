@@ -1,0 +1,23 @@
+# SFT + QLoRA training config for Llama 3.1 8B
+# Requires GPU with 16-24GB VRAM (QLoRA reduces to ~6-8GB effective)
+output_dir: outputs/checkpoints
+num_train_epochs: 3
+per_device_train_batch_size: 2
+per_device_eval_batch_size: 2
+gradient_accumulation_steps: 8
+learning_rate: 2.0e-4
+warmup_ratio: 0.03
+lr_scheduler_type: cosine
+logging_steps: 10
+save_steps: 100
+eval_steps: 100
+save_total_limit: 3
+load_best_model_at_end: true
+metric_for_best_model: eval_loss
+greater_is_better: false
+fp16: false
+bf16: true   # Use bfloat16 with QLoRA for stability
+gradient_checkpointing: true
+max_grad_norm: 1.0
+weight_decay: 0.01
+early_stopping_patience: 3
