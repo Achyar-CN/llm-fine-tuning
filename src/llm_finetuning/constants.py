@@ -24,7 +24,7 @@ IGNORE_INDEX = -100
 
 # Minimum/maximum acceptable hyperparameter ranges (used in config validation)
 HP_BOUNDS = {
-    "learning_rate": (1e-6, 1e-1),
+    "learning_rate": (1e-8, 1e-1),
     "num_train_epochs": (1, 10),
     "warmup_ratio": (0.0, 0.3),
     "lora_r": (1, 256),
