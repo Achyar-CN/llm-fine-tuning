@@ -1,0 +1,9 @@
+[flake8]
+max-line-length = 120
+extend-ignore = E203, W503
+
+# synthetic_generator.py contains long template data strings (QA pairs, code
+# examples, translation pairs). Reformatting them would harm readability of
+# the natural-language data, so E501 is suppressed for this file only.
+per-file-ignores =
+    src/llm_finetuning/data/synthetic_generator.py:E501

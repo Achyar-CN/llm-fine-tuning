@@ -62,7 +62,6 @@ def _mask_non_assistant_tokens(
 
     # Locate the start of the last assistant content in the full token sequence
     # by comparing prefix (all tokens before last assistant response)
-    last_assistant = assistant_messages[-1]["content"]
     messages_without_last = messages[:-1] if messages[-1]["role"] == "assistant" else messages
 
     prefix_text = tokenizer.apply_chat_template(

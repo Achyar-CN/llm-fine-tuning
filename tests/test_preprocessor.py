@@ -88,7 +88,7 @@ def test_labels_contain_ignore_index() -> None:
 def test_labels_have_non_ignore_portion() -> None:
     """At least some labels must NOT be masked (the assistant's response)."""
     result = apply_chat_template_and_tokenize(_SAMPLE, _TOKENIZER, max_length=128)
-    non_masked = [l for l in result["labels"] if l != IGNORE_INDEX]
+    non_masked = [label for label in result["labels"] if label != IGNORE_INDEX]
     assert len(non_masked) > 0, "All labels are masked — assistant tokens should not be masked"
 
 
@@ -98,10 +98,10 @@ def test_labels_prefix_is_fully_masked() -> None:
     result = apply_chat_template_and_tokenize(_SAMPLE, _TOKENIZER, max_length=128)
     labels = result["labels"]
     # Find first non-masked position
-    first_non_masked = next((i for i, l in enumerate(labels) if l != IGNORE_INDEX), None)
+    first_non_masked = next((i for i, label in enumerate(labels) if label != IGNORE_INDEX), None)
     assert first_non_masked is not None, "No non-masked labels found"
     # Everything before that position should be masked
-    assert all(l == IGNORE_INDEX for l in labels[:first_non_masked])
+    assert all(label == IGNORE_INDEX for label in labels[:first_non_masked])
 
 
 # ---------------------------------------------------------------------------

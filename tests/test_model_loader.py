@@ -10,7 +10,6 @@ from llm_finetuning.config import ModelConfig
 from llm_finetuning.models.loader import (
     build_bnb_config,
     load_model,
-    load_model_and_tokenizer,
     load_tokenizer,
 )
 from llm_finetuning.models.utils import count_trainable_parameters, get_device

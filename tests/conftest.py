@@ -5,14 +5,12 @@ that downloads in seconds and runs on CPU. This keeps CI fast.
 """
 
 import json
-import tempfile
 from pathlib import Path
 from typing import Any
 
 import pytest
 
 from llm_finetuning.data.synthetic_generator import SyntheticGeneratorConfig, generate_dataset
-from llm_finetuning.data.templates import format_chat
 
 TINY_MODEL_NAME = "sshleifer/tiny-gpt2"
 
