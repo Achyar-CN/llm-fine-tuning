@@ -1,0 +1,59 @@
+name: Model Evaluation Check
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  evaluate-smoke:
+    name: Evaluation Pipeline Smoke Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: "pip"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e ".[dev]"
+
+      - name: Generate small synthetic dataset
+        run: |
+          python -c "
+          import json, sys
+          sys.path.insert(0, 'src')
+          from llm_finetuning.data.synthetic_generator import (
+              SyntheticGeneratorConfig, generate_dataset, save_jsonl
+          )
+          cfg = SyntheticGeneratorConfig(num_samples=20, seed=42, output_path='/tmp/test_eval.jsonl')
+          save_jsonl(generate_dataset(cfg), cfg.output_path)
+          print('Generated 20 samples to /tmp/test_eval.jsonl')
+          "
+
+      - name: Smoke test evaluation metrics
+        run: |
+          python -c "
+          import sys
+          sys.path.insert(0, 'src')
+          from llm_finetuning.evaluation.metrics import evaluate
+          preds = ['machine learning is a field of AI'] * 5
+          refs  = ['machine learning is a subset of artificial intelligence'] * 5
+          result = evaluate(preds, refs, losses=[1.5] * 5)
+          assert 0.0 <= result.bleu <= 100.0, f'BLEU out of range: {result.bleu}'
+          assert 0.0 <= result.rougeL <= 1.0, f'ROUGE-L out of range: {result.rougeL}'
+          assert result.perplexity >= 1.0, f'Perplexity < 1: {result.perplexity}'
+          print(f'Evaluation smoke test passed: BLEU={result.bleu:.2f}, ROUGE-L={result.rougeL:.4f}, PPL={result.perplexity:.2f}')
+          "
+
+      - name: Upload evaluation results
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-smoke-results
+          path: /tmp/test_eval.jsonl
+          if-no-files-found: ignore
