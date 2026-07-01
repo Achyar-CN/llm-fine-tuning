@@ -59,9 +59,7 @@ def load_model(cfg: ModelConfig) -> PreTrainedModel:
     if bnb_config is not None and (cfg.load_in_4bit or cfg.load_in_8bit):
         from peft import prepare_model_for_kbit_training
 
-        model = prepare_model_for_kbit_training(
-            model, use_gradient_checkpointing=True
-        )
+        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=True)
 
     return model
 

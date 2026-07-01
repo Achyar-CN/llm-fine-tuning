@@ -41,9 +41,7 @@ def create_dataset_splits(
     train_val = dataset.train_test_split(test_size=test_size, seed=seed)
     # Then split validation from the training portion
     val_fraction_of_train_val = validation_ratio / (train_ratio + validation_ratio)
-    train_val_split = train_val["train"].train_test_split(
-        test_size=val_fraction_of_train_val, seed=seed
-    )
+    train_val_split = train_val["train"].train_test_split(test_size=val_fraction_of_train_val, seed=seed)
     return DatasetDict(
         {
             "train": train_val_split["train"],

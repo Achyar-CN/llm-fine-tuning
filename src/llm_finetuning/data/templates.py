@@ -9,21 +9,19 @@ so this module only needs to produce the universal messages list.
 
 from typing import Any
 
-
 # Model family to HuggingFace tokenizer chat template key
 # (used to validate that the tokenizer has a suitable template at load time)
 MODEL_FAMILY_TEMPLATES: dict[str, str] = {
-    "llama": "llama-3",        # TinyLlama, Llama 3.x
-    "qwen": "qwen",            # Qwen2, Qwen2.5 (multilingual, incl. Bahasa Indonesia)
+    "llama": "llama-3",  # TinyLlama, Llama 3.x
+    "qwen": "qwen",  # Qwen2, Qwen2.5 (multilingual, incl. Bahasa Indonesia)
     "mistral": "mistral",
     "gemma": "gemma",
-    "gpt2": "gpt2",            # No official chat template — set manually in tests
+    "gpt2": "gpt2",  # No official chat template — set manually in tests
 }
 
 
 SYSTEM_PROMPT_DEFAULT = (
-    "You are a helpful, harmless, and honest AI assistant. "
-    "Answer questions clearly and concisely."
+    "You are a helpful, harmless, and honest AI assistant. " "Answer questions clearly and concisely."
 )
 
 SYSTEM_PROMPT_ID = (

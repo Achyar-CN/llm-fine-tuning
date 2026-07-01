@@ -1,14 +1,12 @@
 """Unit tests for models/peft_config.py."""
 
 import pytest
-
 from peft import LoraConfig
 
 from llm_finetuning.config import ModelConfig
 from llm_finetuning.models.loader import load_model
 from llm_finetuning.models.peft_config import apply_lora, create_lora_config
 from llm_finetuning.models.utils import count_trainable_parameters
-
 
 TINY_MODEL = "sshleifer/tiny-gpt2"
 
@@ -57,9 +55,7 @@ def test_lora_target_modules_not_empty(tiny_cfg: ModelConfig) -> None:
 def test_lora_alpha_double_rank_convention(tiny_cfg: ModelConfig) -> None:
     """Best practice: alpha should be 2 × r."""
     cfg = create_lora_config(tiny_cfg)
-    assert cfg.lora_alpha == 2 * cfg.r, (
-        f"Expected alpha={2 * cfg.r}, got {cfg.lora_alpha}"
-    )
+    assert cfg.lora_alpha == 2 * cfg.r, f"Expected alpha={2 * cfg.r}, got {cfg.lora_alpha}"
 
 
 def test_lora_dropout_valid_range(tiny_cfg: ModelConfig) -> None:

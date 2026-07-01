@@ -66,9 +66,17 @@ def build_prompt_from_messages(
     messages: list[dict[str, str]],
     tokenizer: PreTrainedTokenizerBase,
 ) -> str:
-    """Build a prompt string using the tokenizer's chat template."""
-    return tokenizer.apply_chat_template(
-        messages,
-        tokenize=False,
-        add_generation_prompt=True,
-    )
+    """Build a prompt string using the tokenizer's chat template.
+
+    Falls back to a simple 'role: content' format if the tokenizer
+    has no chat_template (e.g. base GPT-2 variants).
+    """
+    if getattr(tokenizer, "chat_template", None):
+        return tokenizer.apply_chat_template(
+            messages,
+            tokenize=False,
+            add_generation_prompt=True,
+        )
+    parts = [f"{msg['role']}: {msg['content']}" for msg in messages]
+    parts.append("assistant:")
+    return "\n".join(parts)

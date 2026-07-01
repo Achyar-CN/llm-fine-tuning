@@ -10,7 +10,6 @@ import pytest
 from llm_finetuning.constants import IGNORE_INDEX
 from llm_finetuning.data.preprocessor import apply_chat_template_and_tokenize
 
-
 try:
     from transformers import AutoTokenizer
 
@@ -37,9 +36,7 @@ _SAMPLE = {
     ]
 }
 
-requires_tokenizer = pytest.mark.skipif(
-    not _HAS_TOKENIZER, reason="sshleifer/tiny-gpt2 not available"
-)
+requires_tokenizer = pytest.mark.skipif(not _HAS_TOKENIZER, reason="sshleifer/tiny-gpt2 not available")
 
 
 # ---------------------------------------------------------------------------

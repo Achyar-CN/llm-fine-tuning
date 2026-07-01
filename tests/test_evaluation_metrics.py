@@ -12,7 +12,6 @@ from llm_finetuning.evaluation.metrics import (
     evaluate,
 )
 
-
 # ---------------------------------------------------------------------------
 # compute_bleu
 # ---------------------------------------------------------------------------
@@ -127,10 +126,7 @@ def test_perplexity_averages_losses() -> None:
 
 
 def test_evaluation_result_has_all_fields() -> None:
-    result = EvaluationResult(
-        bleu=50.0, rouge1=0.6, rouge2=0.4, rougeL=0.55,
-        perplexity=3.2, num_samples=100
-    )
+    result = EvaluationResult(bleu=50.0, rouge1=0.6, rouge2=0.4, rougeL=0.55, perplexity=3.2, num_samples=100)
     assert result.bleu == 50.0
     assert result.rouge1 == 0.6
     assert result.rougeL == 0.55
@@ -139,8 +135,7 @@ def test_evaluation_result_has_all_fields() -> None:
 
 
 def test_evaluation_result_to_dict_complete() -> None:
-    result = EvaluationResult(bleu=10.0, rouge1=0.3, rouge2=0.1, rougeL=0.25,
-                               perplexity=5.0, num_samples=50)
+    result = EvaluationResult(bleu=10.0, rouge1=0.3, rouge2=0.1, rougeL=0.25, perplexity=5.0, num_samples=50)
     d = result.to_dict()
     for key in ["bleu", "rouge1", "rouge2", "rougeL", "perplexity", "num_samples"]:
         assert key in d

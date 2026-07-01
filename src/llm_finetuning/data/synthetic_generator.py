@@ -14,8 +14,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any
 
-from llm_finetuning.data.templates import format_chat, SYSTEM_PROMPT_ID
-
+from llm_finetuning.data.templates import SYSTEM_PROMPT_ID, format_chat
 
 DOMAINS = ["general_qa", "summarization", "classification", "translation", "code_explanation"]
 
@@ -24,16 +23,46 @@ DOMAINS = ["general_qa", "summarization", "classification", "translation", "code
 # ---------------------------------------------------------------------------
 
 _QA_PAIRS: list[tuple[str, str]] = [
-    ("What is machine learning?", "Machine learning is a branch of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on building algorithms that can access data and use it to learn for themselves."),
-    ("Explain the concept of overfitting in machine learning.", "Overfitting occurs when a model learns the training data too well, including its noise and outliers, resulting in poor performance on new, unseen data. The model becomes too complex and memorizes rather than generalizes."),
-    ("What is the difference between supervised and unsupervised learning?", "Supervised learning uses labeled training data where the algorithm learns to map inputs to known outputs. Unsupervised learning finds hidden patterns in data without predefined labels, discovering structure through clustering or dimensionality reduction."),
-    ("What is gradient descent?", "Gradient descent is an optimization algorithm used to minimize a loss function by iteratively moving in the direction of steepest descent. It updates model parameters proportionally to the negative gradient of the loss with respect to those parameters."),
-    ("What is a transformer architecture?", "A transformer is a deep learning model architecture based entirely on attention mechanisms, dispensing with recurrence. It processes all tokens in parallel using self-attention to capture long-range dependencies, making it highly efficient for sequence tasks like NLP."),
-    ("What is transfer learning?", "Transfer learning is a technique where a model trained on one task is repurposed as the starting point for a model on a related task. It leverages knowledge from pre-training to improve performance with less data and compute."),
-    ("What is regularization in machine learning?", "Regularization is a set of techniques used to prevent overfitting by adding a penalty term to the loss function. Common methods include L1 (Lasso), L2 (Ridge), and dropout, which constrain model complexity."),
-    ("What is the attention mechanism?", "The attention mechanism allows a model to dynamically focus on relevant parts of the input when producing an output. It computes a weighted sum of values based on similarity between a query and a set of keys, enabling models to capture context effectively."),
-    ("What is fine-tuning in the context of LLMs?", "Fine-tuning is the process of taking a pre-trained language model and continuing its training on a smaller, task-specific dataset. This adapts the model's weights to a new domain or task while preserving general knowledge acquired during pre-training."),
-    ("What is LoRA (Low-Rank Adaptation)?", "LoRA is a parameter-efficient fine-tuning technique that freezes pre-trained model weights and injects trainable rank decomposition matrices into each layer. This dramatically reduces the number of trainable parameters while maintaining model quality."),
+    (
+        "What is machine learning?",
+        "Machine learning is a branch of artificial intelligence that enables systems to learn and improve from experience without being explicitly programmed. It focuses on building algorithms that can access data and use it to learn for themselves.",
+    ),
+    (
+        "Explain the concept of overfitting in machine learning.",
+        "Overfitting occurs when a model learns the training data too well, including its noise and outliers, resulting in poor performance on new, unseen data. The model becomes too complex and memorizes rather than generalizes.",
+    ),
+    (
+        "What is the difference between supervised and unsupervised learning?",
+        "Supervised learning uses labeled training data where the algorithm learns to map inputs to known outputs. Unsupervised learning finds hidden patterns in data without predefined labels, discovering structure through clustering or dimensionality reduction.",
+    ),
+    (
+        "What is gradient descent?",
+        "Gradient descent is an optimization algorithm used to minimize a loss function by iteratively moving in the direction of steepest descent. It updates model parameters proportionally to the negative gradient of the loss with respect to those parameters.",
+    ),
+    (
+        "What is a transformer architecture?",
+        "A transformer is a deep learning model architecture based entirely on attention mechanisms, dispensing with recurrence. It processes all tokens in parallel using self-attention to capture long-range dependencies, making it highly efficient for sequence tasks like NLP.",
+    ),
+    (
+        "What is transfer learning?",
+        "Transfer learning is a technique where a model trained on one task is repurposed as the starting point for a model on a related task. It leverages knowledge from pre-training to improve performance with less data and compute.",
+    ),
+    (
+        "What is regularization in machine learning?",
+        "Regularization is a set of techniques used to prevent overfitting by adding a penalty term to the loss function. Common methods include L1 (Lasso), L2 (Ridge), and dropout, which constrain model complexity.",
+    ),
+    (
+        "What is the attention mechanism?",
+        "The attention mechanism allows a model to dynamically focus on relevant parts of the input when producing an output. It computes a weighted sum of values based on similarity between a query and a set of keys, enabling models to capture context effectively.",
+    ),
+    (
+        "What is fine-tuning in the context of LLMs?",
+        "Fine-tuning is the process of taking a pre-trained language model and continuing its training on a smaller, task-specific dataset. This adapts the model's weights to a new domain or task while preserving general knowledge acquired during pre-training.",
+    ),
+    (
+        "What is LoRA (Low-Rank Adaptation)?",
+        "LoRA is a parameter-efficient fine-tuning technique that freezes pre-trained model weights and injects trainable rank decomposition matrices into each layer. This dramatically reduces the number of trainable parameters while maintaining model quality.",
+    ),
 ]
 
 _PASSAGES_FOR_SUMMARY: list[tuple[str, str]] = [
@@ -56,21 +85,61 @@ _PASSAGES_FOR_SUMMARY: list[tuple[str, str]] = [
 ]
 
 _CLASSIFICATION_EXAMPLES: list[tuple[str, str, str]] = [
-    ("Classify the following text as positive, negative, or neutral sentiment.", "The new software update has significantly improved performance and the interface is much more intuitive now.", "Positive. The text expresses satisfaction with improved performance and a more intuitive interface."),
-    ("Classify the following text as positive, negative, or neutral sentiment.", "The product arrived on time but the packaging was damaged and some items were missing.", "Negative. The text highlights problems with damaged packaging and missing items, indicating customer dissatisfaction."),
-    ("Classify the following text as a question, statement, or command.", "Please submit your report before the end of the business day.", "Command. The text is a directive asking someone to perform an action by a deadline."),
-    ("Classify the following text as technical or non-technical content.", "The API endpoint uses OAuth 2.0 bearer token authentication with JWT payload validation.", "Technical. The text contains specialized terminology (API, OAuth, JWT) indicating technical content about authentication."),
+    (
+        "Classify the following text as positive, negative, or neutral sentiment.",
+        "The new software update has significantly improved performance and the interface is much more intuitive now.",
+        "Positive. The text expresses satisfaction with improved performance and a more intuitive interface.",
+    ),
+    (
+        "Classify the following text as positive, negative, or neutral sentiment.",
+        "The product arrived on time but the packaging was damaged and some items were missing.",
+        "Negative. The text highlights problems with damaged packaging and missing items, indicating customer dissatisfaction.",
+    ),
+    (
+        "Classify the following text as a question, statement, or command.",
+        "Please submit your report before the end of the business day.",
+        "Command. The text is a directive asking someone to perform an action by a deadline.",
+    ),
+    (
+        "Classify the following text as technical or non-technical content.",
+        "The API endpoint uses OAuth 2.0 bearer token authentication with JWT payload validation.",
+        "Technical. The text contains specialized terminology (API, OAuth, JWT) indicating technical content about authentication.",
+    ),
 ]
 
 _TRANSLATION_PAIRS: list[tuple[str, str]] = [
-    ("Machine learning is a subset of artificial intelligence.", "Machine learning adalah bagian dari kecerdasan buatan."),
-    ("Fine-tuning a large language model requires significant computational resources.", "Fine-tuning model bahasa besar membutuhkan sumber daya komputasi yang signifikan."),
-    ("The training loss decreased steadily over the epochs.", "Loss pelatihan menurun secara konsisten selama epoch berlangsung."),
-    ("Attention mechanisms allow the model to focus on relevant parts of the input.", "Mekanisme atensi memungkinkan model untuk fokus pada bagian input yang relevan."),
-    ("Gradient checkpointing reduces memory usage during training.", "Gradient checkpointing mengurangi penggunaan memori selama pelatihan."),
-    ("The pre-trained model was fine-tuned on a domain-specific dataset.", "Model yang sudah di-pretrain di-fine-tune menggunakan dataset yang spesifik untuk domain tertentu."),
-    ("Data preprocessing is a critical step in the machine learning pipeline.", "Preprocessing data adalah langkah krusial dalam pipeline machine learning."),
-    ("The model achieved state-of-the-art performance on the benchmark.", "Model ini mencapai performa terbaik di kelasnya pada benchmark tersebut."),
+    (
+        "Machine learning is a subset of artificial intelligence.",
+        "Machine learning adalah bagian dari kecerdasan buatan.",
+    ),
+    (
+        "Fine-tuning a large language model requires significant computational resources.",
+        "Fine-tuning model bahasa besar membutuhkan sumber daya komputasi yang signifikan.",
+    ),
+    (
+        "The training loss decreased steadily over the epochs.",
+        "Loss pelatihan menurun secara konsisten selama epoch berlangsung.",
+    ),
+    (
+        "Attention mechanisms allow the model to focus on relevant parts of the input.",
+        "Mekanisme atensi memungkinkan model untuk fokus pada bagian input yang relevan.",
+    ),
+    (
+        "Gradient checkpointing reduces memory usage during training.",
+        "Gradient checkpointing mengurangi penggunaan memori selama pelatihan.",
+    ),
+    (
+        "The pre-trained model was fine-tuned on a domain-specific dataset.",
+        "Model yang sudah di-pretrain di-fine-tune menggunakan dataset yang spesifik untuk domain tertentu.",
+    ),
+    (
+        "Data preprocessing is a critical step in the machine learning pipeline.",
+        "Preprocessing data adalah langkah krusial dalam pipeline machine learning.",
+    ),
+    (
+        "The model achieved state-of-the-art performance on the benchmark.",
+        "Model ini mencapai performa terbaik di kelasnya pada benchmark tersebut.",
+    ),
 ]
 
 _CODE_EXAMPLES: list[tuple[str, str]] = [

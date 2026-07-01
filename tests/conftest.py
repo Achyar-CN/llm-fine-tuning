@@ -14,7 +14,6 @@ import pytest
 from llm_finetuning.data.synthetic_generator import SyntheticGeneratorConfig, generate_dataset
 from llm_finetuning.data.templates import format_chat
 
-
 TINY_MODEL_NAME = "sshleifer/tiny-gpt2"
 
 _SAMPLE_MESSAGES = [

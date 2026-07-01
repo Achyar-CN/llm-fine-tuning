@@ -3,12 +3,11 @@
 import pytest
 
 from llm_finetuning.data.synthetic_generator import (
+    DOMAINS,
     SyntheticGeneratorConfig,
     generate_dataset,
-    DOMAINS,
 )
 from llm_finetuning.data.templates import validate_message_schema
-
 
 # ---------------------------------------------------------------------------
 # Fixtures
@@ -54,9 +53,7 @@ def test_no_empty_content(dataset: list) -> None:
     """No message content should be empty or whitespace-only."""
     for sample in dataset:
         for msg in sample["messages"]:
-            assert msg["content"].strip(), (
-                f"Empty content in role '{msg['role']}': {sample}"
-            )
+            assert msg["content"].strip(), f"Empty content in role '{msg['role']}': {sample}"
 
 
 def test_valid_roles_only(dataset: list) -> None:

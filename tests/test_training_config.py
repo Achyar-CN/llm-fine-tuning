@@ -14,7 +14,6 @@ from llm_finetuning.training.metrics import (
     compute_token_accuracy,
 )
 
-
 # ---------------------------------------------------------------------------
 # Fixtures
 # ---------------------------------------------------------------------------
@@ -44,8 +43,13 @@ def test_training_yaml_loads_without_error(training_yaml_path: Path) -> None:
 
 def test_required_fields_present(training_yaml_path: Path) -> None:
     raw = yaml.safe_load(training_yaml_path.read_text())
-    required = ["learning_rate", "num_train_epochs", "per_device_train_batch_size",
-                 "gradient_accumulation_steps", "warmup_ratio"]
+    required = [
+        "learning_rate",
+        "num_train_epochs",
+        "per_device_train_batch_size",
+        "gradient_accumulation_steps",
+        "warmup_ratio",
+    ]
     for field in required:
         assert field in raw, f"Required field '{field}' missing from {training_yaml_path.name}"
 
@@ -58,9 +62,7 @@ def test_required_fields_present(training_yaml_path: Path) -> None:
 def test_learning_rate_in_valid_range(training_yaml_path: Path) -> None:
     cfg = training_config_from_yaml(training_yaml_path)
     lo, hi = HP_BOUNDS["learning_rate"]
-    assert lo < cfg.learning_rate < hi, (
-        f"learning_rate {cfg.learning_rate} out of range ({lo}, {hi})"
-    )
+    assert lo < cfg.learning_rate < hi, f"learning_rate {cfg.learning_rate} out of range ({lo}, {hi})"
 
 
 def test_num_epochs_in_valid_range(training_yaml_path: Path) -> None:
@@ -78,9 +80,7 @@ def test_warmup_ratio_in_valid_range(training_yaml_path: Path) -> None:
 def test_effective_batch_size_realistic(training_yaml_path: Path) -> None:
     cfg = training_config_from_yaml(training_yaml_path)
     effective_bs = cfg.per_device_train_batch_size * cfg.gradient_accumulation_steps
-    assert 2 <= effective_bs <= 512, (
-        f"Effective batch size {effective_bs} outside realistic range [2, 512]"
-    )
+    assert 2 <= effective_bs <= 512, f"Effective batch size {effective_bs} outside realistic range [2, 512]"
 
 
 def test_save_steps_positive(training_yaml_path: Path) -> None:
